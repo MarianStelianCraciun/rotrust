@@ -329,7 +329,8 @@ We welcome contributions to the RoTrust project. Please note that we have implem
 
 - **Direct pushes to the main branch are not allowed**
 - All changes must be made through pull requests
-- Pull requests require review before merging
+- Pull requests require specific approval before merging
+- **Only pull requests approved by the repository owner can be merged to main**
 
 To contribute:
 
