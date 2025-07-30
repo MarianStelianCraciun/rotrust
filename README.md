@@ -1,6 +1,6 @@
-# RoTrust: Real Estate Blockchain Registry
+# RoTrust: Real Estate Registry
 
-A blockchain-based platform revolutionizing real estate transactions in Romania by reducing fraud, streamlining property transfers, and creating a transparent record of ownership history.
+A digital platform revolutionizing real estate transactions in Romania by reducing fraud, streamlining property transfers, and creating a transparent record of ownership history.
 
 ## Problem Statement
 
@@ -12,10 +12,10 @@ Romania's real estate market faces significant challenges with documentation, ve
 
 ## Our Solution
 
-RoTrust leverages blockchain technology to create a secure, transparent, and efficient real estate registry that:
-- Provides immutable records of property ownership
+RoTrust is a secure, transparent, and efficient real estate registry that:
+- Provides reliable records of property ownership
 - Streamlines transaction processes
-- Reduces fraud through cryptographic verification
+- Reduces fraud through robust verification
 - Creates a single source of truth for property information
 - Integrates with existing notary and land registry systems
 
@@ -33,25 +33,21 @@ RoTrust is built on a robust technical foundation:
   - `/api/properties`: Property registration and management
   - `/api/transactions`: Transaction processing
 
-### Blockchain Layer (Hyperledger Fabric)
-- **Network Structure**: Multi-organization network with dedicated nodes for:
-  - Notaries
-  - Land Registry offices
-  - Banks
-- **Smart Contracts**:
-  - `PropertyContract`: Manages property registration and ownership
-  - `TransactionContract`: Handles property transfers between parties
-  - `EscrowContract`: Manages escrow processes with conditional releases
+### Data Storage Layer
+- **Database**: PostgreSQL for persistent data storage
+- **Data Models**: Comprehensive models for properties, transactions, and user data
+- **Backup System**: Regular automated backups to ensure data integrity
 
-### Integration Layer
-- Connects FastAPI backend with Hyperledger Fabric network
-- Provides transaction submission and query capabilities
-- Ensures data consistency between API and blockchain
+### Security Layer
+- **Authentication**: JWT-based secure authentication
+- **Authorization**: Role-based access control
+- **Data Encryption**: Sensitive data encrypted at rest and in transit
+- **Audit Logging**: Comprehensive logging of all system activities
 
 ## Key Features
 
-- **Immutable Property Records**: Complete history of ownership and transactions
-- **Smart Contract Automation**: Automated escrow, payments, and transfers
+- **Comprehensive Property Records**: Complete history of ownership and transactions
+- **Process Automation**: Automated escrow, payments, and transfers
 - **Verification Services**: Quick property history and ownership verification
 - **Notary Integration**: Seamless connection with existing legal frameworks
 - **Institutional API Access**: Secure access for banks and government institutions
@@ -89,9 +85,8 @@ Romania's real estate market presents significant opportunities:
 ### Prerequisites
 - Python 3.8+ (Python 3.13 recommended)
 - Poetry (Python dependency management)
-- Docker and Docker Compose
-- Node.js 14+
-- Hyperledger Fabric binaries
+- Docker and Docker Compose (for containerized deployment)
+- Node.js 14+ (for frontend)
 
 ### Installing Poetry
 ```bash
@@ -116,7 +111,7 @@ RoTrust provides a Makefile to simplify setup and operation:
 git clone https://github.com/your-organization/rotrust.git
 cd rotrust
 
-# Set up the entire project (installs dependencies, sets up blockchain and frontend)
+# Set up the entire project (installs dependencies and sets up frontend)
 make setup
 
 # Set up environment variables
@@ -152,12 +147,8 @@ poetry install
 cp .env.example .env
 # Edit .env with your configuration
 
-# Set up the blockchain network
-cd blockchain/network
-./setup-network.sh  # On Windows: use PowerShell or WSL
-
 # Start the FastAPI application
-cd ../../backend
+cd backend
 poetry run uvicorn main:app --reload
 ```
 

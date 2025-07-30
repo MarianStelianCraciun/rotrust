@@ -4,8 +4,8 @@ from pydantic import BaseModel
 from datetime import datetime
 
 # Import services
-from app.services.transaction_service import TransactionService
-from app.services.auth_service import get_current_user
+from backend.app.services.transaction_service import TransactionService
+from backend.app.services.auth_service import get_current_user
 
 # Create router
 router = APIRouter()
@@ -31,9 +31,9 @@ class TransactionResponse(BaseModel):
     created_at: str
     updated_at: str
 
-    class Config:
-        orm_mode = True
-        from_attributes = True
+    model_config = {
+        "from_attributes": True
+    }
 
 # Initialize service
 transaction_service = TransactionService()

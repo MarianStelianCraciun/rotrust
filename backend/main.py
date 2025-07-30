@@ -25,7 +25,7 @@ app.add_middleware(
 )
 
 # Import routers
-from app.routers import properties, transactions, users, auth
+from backend.app.routers import properties, transactions, users, auth
 
 # Include routers
 app.include_router(auth.router, prefix="/api/auth", tags=["Authentication"])

@@ -3,7 +3,7 @@ from typing import List, Dict, Any, Optional
 from pydantic import BaseModel, EmailStr
 
 # Import services
-from app.services.auth_service import AuthService, get_current_user
+from backend.app.services.auth_service import AuthService, get_current_user
 
 # Create router
 router = APIRouter()
@@ -24,9 +24,9 @@ class UserResponse(UserBase):
     is_active: bool
     created_at: str
 
-    class Config:
-        orm_mode = True
-        from_attributes = True
+    model_config = {
+        "from_attributes": True
+    }
 
 # Initialize service
 auth_service = AuthService()

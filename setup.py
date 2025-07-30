@@ -16,7 +16,10 @@ setup(
         "sqlalchemy>=2.0.22",
         "alembic>=1.12.0",
         "psycopg2-binary>=2.9.9",
-        "fabric-gateway>=1.2.0",
+        "fabric-sdk-py>=0.9.0",
+        "hyperledger-fabric-sdk>=0.8.0",
+        "cryptography>=41.0.7",
+        "PyJWT>=2.6.0",
     ],
     extras_require={
         "dev": [

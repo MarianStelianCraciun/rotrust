@@ -4,7 +4,7 @@ from typing import Dict, Any
 from datetime import timedelta
 
 # Import services
-from app.services.auth_service import auth_service, get_current_user, ACCESS_TOKEN_EXPIRE_MINUTES
+from backend.app.services.auth_service import auth_service, get_current_user, ACCESS_TOKEN_EXPIRE_MINUTES
 
 # Create router
 router = APIRouter()
