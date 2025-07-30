@@ -19,15 +19,34 @@ RoTrust leverages blockchain technology to create a secure, transparent, and eff
 - Creates a single source of truth for property information
 - Integrates with existing notary and land registry systems
 
-## Technical Implementation
+## Technical Architecture
 
 RoTrust is built on a robust technical foundation:
 
-- **Backend**: Python-based with FastAPI framework for high-performance web services
-- **Blockchain**: Hyperledger Fabric for private, permissioned transactions
-- **Smart Contracts**: Automated escrow and property transfer processes
-- **Integration**: APIs connecting to notary services and land registry systems
-- **Security**: Multi-signature authentication and encryption for all transactions
+### Backend (Python/FastAPI)
+- **Framework**: FastAPI for high-performance, async API endpoints
+- **Authentication**: JWT-based authentication system
+- **Database**: PostgreSQL with SQLAlchemy ORM
+- **API Structure**:
+  - `/api/auth`: Authentication endpoints
+  - `/api/users`: User management
+  - `/api/properties`: Property registration and management
+  - `/api/transactions`: Transaction processing
+
+### Blockchain Layer (Hyperledger Fabric)
+- **Network Structure**: Multi-organization network with dedicated nodes for:
+  - Notaries
+  - Land Registry offices
+  - Banks
+- **Smart Contracts**:
+  - `PropertyContract`: Manages property registration and ownership
+  - `TransactionContract`: Handles property transfers between parties
+  - `EscrowContract`: Manages escrow processes with conditional releases
+
+### Integration Layer
+- Connects FastAPI backend with Hyperledger Fabric network
+- Provides transaction submission and query capabilities
+- Ensures data consistency between API and blockchain
 
 ## Key Features
 
@@ -87,71 +106,162 @@ source venv/bin/activate  # On Windows: venv\Scripts\activate
 # Install dependencies
 pip install -r requirements.txt
 
-# Install FastAPI specific dependencies
-pip install fastapi uvicorn pydantic
+# Set up environment variables
+cp .env.example .env
+# Edit .env with your configuration
 
 # Set up the blockchain network
-cd blockchain
-./setup-network.sh
+cd blockchain/network
+./setup-network.sh  # On Windows: use PowerShell or WSL
 
 # Start the FastAPI application
-cd ../backend
+cd ../../backend
 uvicorn main:app --reload
+```
+
+## API Documentation
+
+### Authentication API
+
+```
+# Login
+POST /api/auth/login
+
+Request body:
+{
+    "username": "user@example.com",
+    "password": "securepassword"
+}
+
+Response:
+{
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+    "token_type": "bearer",
+    "user_id": "user123",
+    "expires_in": 1800
+}
+
+# Register new user
+POST /api/auth/register
+
+Request body:
+{
+    "email": "user@example.com",
+    "password": "securepassword",
+    "full_name": "John Doe",
+    "role": "agent"
+}
+
+Response:
+{
+    "user_id": "user123",
+    "email": "user@example.com",
+    "full_name": "John Doe",
+    "role": "agent",
+    "created_at": "2025-07-30T21:51:00Z"
+}
+```
+
+### Users API
+
+```
+# Get user profile
+GET /api/users/me
+
+Response:
+{
+    "user_id": "user123",
+    "email": "user@example.com",
+    "full_name": "John Doe",
+    "role": "agent",
+    "created_at": "2025-07-30T21:51:00Z"
+}
+
+# Update user profile
+PUT /api/users/me
+
+Request body:
+{
+    "full_name": "John Smith",
+    "phone": "+40721234567"
+}
+
+Response:
+{
+    "user_id": "user123",
+    "email": "user@example.com",
+    "full_name": "John Smith",
+    "phone": "+40721234567",
+    "role": "agent",
+    "created_at": "2025-07-30T21:51:00Z",
+    "updated_at": "2025-07-30T22:00:00Z"
+}
 ```
 
 ## Usage Examples
 
-### Registering a Property
-```python
-from fastapi import APIRouter, Depends, HTTPException
-from rotrust.properties import PropertyService
+### API Usage Examples
 
-router = APIRouter()
-property_service = PropertyService()
+#### Properties API
 
-@router.post("/properties/", response_model=dict)
-async def register_property(property_data: dict):
-    try:
-        property_id = property_service.register_property(
-            address=property_data["address"],
-            owner_id=property_data["owner_id"],
-            property_details=property_data["details"],
-            documents=property_data["documents"]
-        )
-        return {"property_id": property_id, "status": "registered"}
-    except Exception as e:
-        raise HTTPException(status_code=400, detail=str(e))
+```
+# Register a property
+POST /api/properties/
+
+Request body:
+{
+    "address": "123 Main St, Bucharest",
+    "property_type": "apartment",
+    "size": 85.5,
+    "rooms": 3,
+    "description": "Modern apartment in central location",
+    "owner_id": "user123",
+    "documents": ["deed123", "certificate456"]
+}
+
+# Get property details
+GET /api/properties/{property_id}
+
+# List properties with optional filtering
+GET /api/properties/?owner_id=user123&property_type=apartment
+
+# Update property details
+PUT /api/properties/{property_id}
+
+Request body:
+{
+    "address": "123 Main St, Bucharest",
+    "property_type": "apartment",
+    "size": 90.5,
+    "rooms": 3,
+    "description": "Updated description"
+}
 ```
 
-### Transferring Ownership
-```python
-from fastapi import APIRouter, Depends, HTTPException
-from rotrust.transactions import TransactionService
-from pydantic import BaseModel
+#### Transactions API
 
-router = APIRouter()
-transaction_service = TransactionService()
+```
+# Initiate property transfer
+POST /api/transactions/transfers/
 
-class TransferRequest(BaseModel):
-    property_id: str
-    seller_id: str
-    buyer_id: str
-    price: float
-    payment_method: str
+Request body:
+{
+    "property_id": "prop123",
+    "seller_id": "user123",
+    "buyer_id": "user456",
+    "price": 120000.00,
+    "payment_method": "bank_transfer",
+    "notes": "Optional notes about the transaction"
+}
 
-@router.post("/transfers/", response_model=dict)
-async def transfer_property(transfer_data: TransferRequest):
-    try:
-        transaction_id = transaction_service.execute_transfer(
-            property_id=transfer_data.property_id,
-            seller_id=transfer_data.seller_id,
-            buyer_id=transfer_data.buyer_id,
-            price=transfer_data.price,
-            payment_method=transfer_data.payment_method
-        )
-        return {"transaction_id": transaction_id, "status": "completed"}
-    except Exception as e:
-        raise HTTPException(status_code=400, detail=str(e))
+# Get transaction details
+GET /api/transactions/transfers/{transaction_id}
+
+# List transactions with filtering
+GET /api/transactions/transfers/?property_id=prop123&status=pending
+
+# Cancel a transaction
+PUT /api/transactions/transfers/{transaction_id}/cancel
 ```
 
 ## Contributing

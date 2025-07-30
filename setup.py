@@ -16,7 +16,7 @@ setup(
         "sqlalchemy>=2.0.22",
         "alembic>=1.12.0",
         "psycopg2-binary>=2.9.9",
-        "fabric-sdk-py>=0.9.0",
+        "fabric-gateway>=1.2.0",
     ],
     extras_require={
         "dev": [
