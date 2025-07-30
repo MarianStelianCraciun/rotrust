@@ -31,6 +31,16 @@ class Settings(BaseSettings):
     # Database settings
     DATABASE_URL: Optional[str] = os.getenv("DATABASE_URL", "sqlite:///./rotrust.db")
     
+    # AWS settings
+    AWS_REGION: str = os.getenv("AWS_REGION", "eu-central-1")
+    AWS_ACCESS_KEY_ID: Optional[str] = os.getenv("AWS_ACCESS_KEY_ID")
+    AWS_SECRET_ACCESS_KEY: Optional[str] = os.getenv("AWS_SECRET_ACCESS_KEY")
+    ENVIRONMENT: str = os.getenv("ENVIRONMENT", "development")
+    
+    # S3 settings
+    S3_BUCKET_NAME: str = os.getenv("S3_BUCKET_NAME", "rotrust-documents")
+    S3_BACKUP_BUCKET: str = os.getenv("S3_BACKUP_BUCKET", "rotrust-backups")
+    
     # Blockchain settings
     BLOCKCHAIN_NETWORK: str = os.getenv("BLOCKCHAIN_NETWORK", "development")
     BLOCKCHAIN_CHANNEL: str = os.getenv("BLOCKCHAIN_CHANNEL", "rotrust-channel")

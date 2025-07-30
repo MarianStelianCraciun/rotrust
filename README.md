@@ -21,28 +21,40 @@ RoTrust is a secure, transparent, and efficient real estate registry that:
 
 ## Technical Architecture
 
-RoTrust is built on a robust technical foundation:
+RoTrust is built on a robust technical foundation leveraging AWS cloud services:
 
 ### Backend (Python/FastAPI)
 - **Framework**: FastAPI for high-performance, async API endpoints
-- **Authentication**: JWT-based authentication system
-- **Database**: PostgreSQL with SQLAlchemy ORM
+- **Authentication**: JWT-based authentication system with AWS Secrets Manager
+- **Database**: Amazon RDS for PostgreSQL with SQLAlchemy ORM
 - **API Structure**:
   - `/api/auth`: Authentication endpoints
   - `/api/users`: User management
   - `/api/properties`: Property registration and management
   - `/api/transactions`: Transaction processing
 
+### AWS Cloud Infrastructure
+- **Compute**: AWS Elastic Beanstalk for application hosting
+- **Database**: Amazon RDS for PostgreSQL (high availability, automated backups)
+- **Storage**: Amazon S3 for document storage and archiving
+- **API Management**: Amazon API Gateway for API security and throttling
+- **Authentication**: AWS Secrets Manager for secure credential storage
+- **Blockchain**: Amazon Managed Blockchain for property records (optional)
+- **Monitoring**: Amazon CloudWatch for logging, metrics, and alerts
+- **CDN**: Amazon CloudFront for global content delivery
+
 ### Data Storage Layer
-- **Database**: PostgreSQL for persistent data storage
+- **Database**: Amazon RDS for PostgreSQL for persistent data storage
+- **Document Storage**: Amazon S3 for secure document storage with versioning
 - **Data Models**: Comprehensive models for properties, transactions, and user data
-- **Backup System**: Regular automated backups to ensure data integrity
+- **Backup System**: Automated backups via RDS and S3 versioning
 
 ### Security Layer
-- **Authentication**: JWT-based secure authentication
+- **Authentication**: JWT-based secure authentication with AWS Secrets Manager
 - **Authorization**: Role-based access control
-- **Data Encryption**: Sensitive data encrypted at rest and in transit
-- **Audit Logging**: Comprehensive logging of all system activities
+- **Data Encryption**: AWS KMS for encryption at rest and in transit
+- **Audit Logging**: Comprehensive logging via CloudWatch
+- **Network Security**: VPC configuration with security groups and NACLs
 
 ## Key Features
 
@@ -80,6 +92,92 @@ Romania's real estate market presents significant opportunities:
 - Increasing adoption of digital solutions in real estate
 - Strong need for technological improvements in transaction security
 
+## AWS Deployment and Cost Estimates
+
+RoTrust leverages AWS cloud services for scalable, secure, and reliable operation. Below is a breakdown of the required AWS services and their estimated monthly costs.
+
+### Required AWS Services and Estimated Costs
+
+| AWS Service | Purpose | Configuration | Estimated Monthly Cost |
+|-------------|---------|---------------|------------------------|
+| **AWS Elastic Beanstalk** | Application hosting | 2 t3.small instances with load balancing | $50-70 |
+| **Amazon RDS for PostgreSQL** | Database | db.t3.small, 100GB storage, Multi-AZ | $160-200 |
+| **Amazon S3** | Document storage | 500GB storage with standard access | $12-15 |
+| **Amazon API Gateway** | API management | 10 million requests per month | $35-40 |
+| **AWS Secrets Manager** | Secret management | 5 secrets with 1000 API calls per day | $5-7 |
+| **Amazon CloudWatch** | Monitoring and logging | Basic monitoring with 5GB log ingestion | $15-20 |
+| **Amazon CloudFront** | Content delivery | 100GB data transfer, 10 million requests | $12-15 |
+| **AWS KMS** | Encryption | 1 customer managed key | $1 |
+| **Amazon Managed Blockchain** (optional) | Blockchain ledger | Hyperledger Fabric with 2 nodes | $200-250 |
+| **AWS Certificate Manager** | SSL certificates | Included with CloudFront | $0 |
+| **Amazon VPC** | Network isolation | Standard VPC configuration | $0 |
+| **Total Estimated Cost** | | | **$290-370** (without Blockchain)<br>**$490-620** (with Blockchain) |
+
+> **Note**: These cost estimates are based on AWS pricing as of July 2025 and may vary based on actual usage, region, and any AWS pricing changes. The estimates assume moderate usage for a production environment. Development and testing environments would cost significantly less.
+
+### Cost Optimization Strategies
+
+- **Reserved Instances**: Purchase reserved instances for RDS and EC2 to reduce costs by up to 40%
+- **S3 Lifecycle Policies**: Implement lifecycle policies to move older documents to cheaper storage tiers
+- **Auto Scaling**: Configure auto-scaling to reduce costs during low-traffic periods
+- **Free Tier**: Utilize AWS Free Tier for development and testing environments
+
+### AWS Deployment Instructions
+
+#### 1. Set Up AWS Account and IAM
+
+1. Create an AWS account if you don't have one
+2. Set up IAM users with appropriate permissions
+3. Configure MFA for enhanced security
+
+#### 2. Database Setup (RDS)
+
+1. Create a PostgreSQL RDS instance:
+   ```
+   AWS Region: eu-central-1 (Frankfurt) or your preferred region
+   DB Instance Class: db.t3.small (minimum for production)
+   Multi-AZ: Yes (for high availability)
+   Storage: 100GB with automatic scaling
+   Backup Retention: 7 days
+   ```
+
+2. Configure security groups to allow access only from your application servers
+
+#### 3. Storage Setup (S3)
+
+1. Create S3 buckets for document storage:
+   ```
+   Bucket for documents: rotrust-documents-{environment}
+   Bucket for backups: rotrust-backups-{environment}
+   ```
+
+2. Configure appropriate bucket policies and CORS settings
+3. Enable versioning for document integrity
+
+#### 4. Application Deployment (Elastic Beanstalk)
+
+1. Create an Elastic Beanstalk environment:
+   ```
+   Platform: Python
+   Environment type: Load balanced
+   Instance type: t3.small (minimum for production)
+   ```
+
+2. Configure environment variables for database connection, S3 access, etc.
+3. Deploy the application using the Elastic Beanstalk CLI or AWS Console
+
+#### 5. API Gateway Configuration
+
+1. Create an API Gateway REST API
+2. Configure routes to match your FastAPI endpoints
+3. Set up request validation, throttling, and caching
+
+#### 6. Monitoring and Logging Setup
+
+1. Configure CloudWatch alarms for key metrics
+2. Set up log groups for application logs
+3. Create a dashboard for monitoring system health
+
 ## Getting Started
 
 ### Prerequisites
@@ -87,6 +185,7 @@ Romania's real estate market presents significant opportunities:
 - Poetry (Python dependency management)
 - Docker and Docker Compose (for containerized deployment)
 - Node.js 14+ (for frontend)
+- AWS CLI (for AWS deployment)
 
 ### Installing Poetry
 ```bash

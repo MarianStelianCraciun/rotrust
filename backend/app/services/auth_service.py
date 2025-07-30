@@ -8,6 +8,10 @@ import os
 import logging
 import uuid
 
+# Import the secrets service for AWS Secrets Manager
+from backend.app.services.secrets_service import SecretsService
+from backend.app.core.config import settings
+
 # This is a mock implementation for demonstration purposes
 # In a real implementation, this would use a database and proper security measures
 
@@ -17,10 +21,13 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 # Setup OAuth2 with Password flow
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="api/auth/token")
 
+# Initialize secrets service
+secrets_service = SecretsService()
+
 # JWT settings
-SECRET_KEY = os.getenv("JWT_SECRET_KEY", "development_secret_key")
-ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
+SECRET_KEY = secrets_service.get_secret("JWT_SECRET_KEY", settings.SECRET_KEY)
+ALGORITHM = settings.ALGORITHM
+ACCESS_TOKEN_EXPIRE_MINUTES = settings.ACCESS_TOKEN_EXPIRE_MINUTES
 
 class AuthService:
     def __init__(self):

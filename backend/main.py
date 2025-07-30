@@ -3,10 +3,18 @@ from fastapi import FastAPI, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 import os
+import logging
 from dotenv import load_dotenv
 
 # Load environment variables
 load_dotenv()
+
+# Configure logging
+from backend.app.core.logging_config import configure_logging
+configure_logging()
+
+# Get logger
+logger = logging.getLogger(__name__)
 
 # Create FastAPI app
 app = FastAPI(

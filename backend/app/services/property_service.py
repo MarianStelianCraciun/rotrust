@@ -1,7 +1,11 @@
-from typing import Dict, List, Any, Optional
+from typing import Dict, List, Any, Optional, BinaryIO
 import uuid
 from datetime import datetime
 import logging
+import os
+
+# Import the storage service for S3 document handling
+from backend.app.services.storage_service import StorageService
 
 # This is a mock implementation for demonstration purposes
 # In a real implementation, this would interact with the blockchain
@@ -11,8 +15,10 @@ class PropertyService:
         self.logger = logging.getLogger(__name__)
         # Mock database for demonstration
         self.properties = {}
+        # Initialize storage service for document handling
+        self.storage_service = StorageService()
         
-    def register_property(self, address: str, owner_id: str, property_details: Dict[str, Any], documents: List[str]) -> str:
+    def register_property(self, address: str, owner_id: str, property_details: Dict[str, Any], documents: List[Dict[str, Any]]) -> str:
         """
         Register a new property on the blockchain.
         
@@ -20,7 +26,10 @@ class PropertyService:
             address: Property address
             owner_id: ID of the property owner
             property_details: Additional property details
-            documents: List of document references
+            documents: List of document dictionaries with keys:
+                      - file_obj: File-like object containing document data
+                      - filename: Original filename
+                      - document_type: Type of document
             
         Returns:
             str: The ID of the newly registered property
@@ -28,6 +37,18 @@ class PropertyService:
         try:
             # Generate a unique property ID
             property_id = f"PROP-{uuid.uuid4().hex[:8].upper()}"
+            
+            # Upload documents to S3
+            document_paths = []
+            for doc in documents:
+                # Upload document to S3
+                s3_path = self.storage_service.upload_document(
+                    file_obj=doc["file_obj"],
+                    filename=doc["filename"],
+                    document_type=doc["document_type"],
+                    property_id=property_id
+                )
+                document_paths.append(s3_path)
             
             # Create property record
             now = datetime.now().isoformat()
@@ -39,7 +60,7 @@ class PropertyService:
                 "size": property_details.get("size", 0),
                 "rooms": property_details.get("rooms"),
                 "description": property_details.get("description"),
-                "documents": documents,
+                "documents": document_paths,
                 "status": "active",
                 "created_at": now,
                 "updated_at": now
@@ -49,7 +70,7 @@ class PropertyService:
             # For now, we'll just store it in our mock database
             self.properties[property_id] = property_record
             
-            self.logger.info(f"Property registered: {property_id}")
+            self.logger.info(f"Property registered: {property_id} with {len(document_paths)} documents")
             return property_id
             
         except Exception as e:
