@@ -7,7 +7,7 @@ This document provides a quick reference for running the RoTrust application.
 - Python 3.11 (required)
 - Poetry (Python dependency management)
 - Node.js 14+ (for frontend)
-- Docker and Docker Compose (for blockchain network)
+- Docker and Docker Compose (for containerized deployment)
 
 ## Running the Backend
 

@@ -3,8 +3,8 @@ from typing import List, Dict, Any, Optional
 from pydantic import BaseModel
 
 # Import services
-from app.services.property_service import PropertyService
-from app.services.auth_service import get_current_user
+from backend.app.services.property_service import PropertyService
+from backend.app.services.auth_service import get_current_user
 
 # Create router
 router = APIRouter()

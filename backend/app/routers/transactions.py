@@ -4,8 +4,8 @@ from pydantic import BaseModel
 from datetime import datetime
 
 # Import services
-from app.services.transaction_service import TransactionService
-from app.services.auth_service import get_current_user
+from backend.app.services.transaction_service import TransactionService
+from backend.app.services.auth_service import get_current_user
 
 # Create router
 router = APIRouter()
