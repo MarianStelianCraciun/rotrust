@@ -325,13 +325,21 @@ PUT /api/transactions/transfers/{transaction_id}/cancel
 
 ## Contributing
 
-We welcome contributions to the RoTrust project:
+We welcome contributions to the RoTrust project. Please note that we have implemented branch protection rules to maintain code quality:
 
-1. Fork the repository
+- **Direct pushes to the main branch are not allowed**
+- All changes must be made through pull requests
+- Pull requests require review before merging
+
+To contribute:
+
+1. Fork the repository (if you're an external contributor) or create a new branch (if you're a team member)
 2. Create your feature branch (`git checkout -b feature/amazing-feature`)
 3. Commit your changes (`git commit -m 'Add some amazing feature'`)
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
+
+For detailed contribution guidelines, please see our [CONTRIBUTING.md](.github/CONTRIBUTING.md) file.
 
 ## License
 
