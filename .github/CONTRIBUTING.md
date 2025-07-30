@@ -1,6 +1,6 @@
 # Contributing to Rotrust
 
-Thank you for your interest in contributing to Rotrust! This document provides guidelines for contributing to the project and explains our branch protection rules.
+Thank you for your interest in contributing to Rotrust! This document provides guidelines for contributing to the project and explains our branch protection rules. For more detailed workflow guidelines, please refer to our [WORKFLOW_GUIDELINES.md](WORKFLOW_GUIDELINES.md) document.
 
 ## Branch Protection Rules
 
