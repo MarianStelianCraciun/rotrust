@@ -24,9 +24,9 @@ class UserResponse(UserBase):
     is_active: bool
     created_at: str
 
-    class Config:
-        orm_mode = True
-        from_attributes = True
+    model_config = {
+        "from_attributes": True
+    }
 
 # Initialize service
 auth_service = AuthService()

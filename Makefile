@@ -34,12 +34,12 @@ setup-frontend:
 # Setup blockchain network
 setup-blockchain:
 	@echo "Setting up blockchain network..."
-	cd $(NETWORK_DIR) && powershell -Command ".\setup-network.sh"
+	cd $(NETWORK_DIR) && bash setup-network.sh
 
 # Run backend server
 run-backend:
 	@echo "Starting backend server..."
-	cd $(BACKEND_DIR) && $(POETRY) run uvicorn main:app --reload
+	$(POETRY) run uvicorn backend.main:app --reload
 
 # Run frontend development server
 run-frontend:
@@ -58,7 +58,7 @@ test: test-backend test-frontend
 # Run backend tests
 test-backend:
 	@echo "Running backend tests..."
-	cd $(BACKEND_DIR) && $(POETRY) run pytest
+	$(POETRY) run pytest $(BACKEND_DIR)
 
 # Run frontend tests
 test-frontend:
@@ -83,19 +83,19 @@ clean-frontend:
 clean-blockchain:
 	@echo "Cleaning blockchain network..."
 	@echo "Note: This may require manual cleanup of Docker containers and volumes"
-	cd $(NETWORK_DIR) && docker compose down --volumes --remove-orphans
+	cd $(NETWORK_DIR) && docker-compose down --volumes --remove-orphans
 
 # Format code
 format:
 	@echo "Formatting code..."
-	cd $(BACKEND_DIR) && $(POETRY) run black .
-	cd $(BACKEND_DIR) && $(POETRY) run isort .
+	$(POETRY) run black $(BACKEND_DIR)
+	$(POETRY) run isort $(BACKEND_DIR)
 
 # Lint code
 lint:
 	@echo "Linting code..."
-	cd $(BACKEND_DIR) && $(POETRY) run flake8 .
-	cd $(BACKEND_DIR) && $(POETRY) run mypy .
+	$(POETRY) run flake8 $(BACKEND_DIR)
+	$(POETRY) run mypy $(BACKEND_DIR)
 
 # Help
 help:

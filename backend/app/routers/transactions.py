@@ -31,9 +31,9 @@ class TransactionResponse(BaseModel):
     created_at: str
     updated_at: str
 
-    class Config:
-        orm_mode = True
-        from_attributes = True
+    model_config = {
+        "from_attributes": True
+    }
 
 # Initialize service
 transaction_service = TransactionService()

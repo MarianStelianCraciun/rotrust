@@ -8,7 +8,6 @@ This document provides a quick reference for running the RoTrust application.
 - Poetry (Python dependency management)
 - Node.js 14+ (for frontend)
 - Docker and Docker Compose (for blockchain network)
-- GNU Make (for Windows users, install via Chocolatey with `choco install make` or use the batch files)
 
 ## Running the Backend
 
@@ -23,8 +22,6 @@ poetry run uvicorn backend.main:app --reload
 ```bash
 make run-backend
 ```
-
-Note: The Makefile has been updated with Windows-compatible paths and commands.
 
 ### Option 3: Using Batch File (Windows)
 
@@ -85,4 +82,3 @@ If you encounter any issues:
 3. Check that environment variables are properly set in `.env`
 4. For Windows users, ensure you're using PowerShell or Command Prompt
 5. If using WSL on Windows, adjust paths accordingly
-6. If 'make' command is not recognized, install GNU Make for Windows via Chocolatey (`choco install make`) or use the batch files instead

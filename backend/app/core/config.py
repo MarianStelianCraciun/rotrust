@@ -1,7 +1,9 @@
 import os
-from pydantic import BaseSettings
 from typing import Optional, List
 from dotenv import load_dotenv
+from pydantic import BaseModel
+# In Pydantic v2, BaseSettings is moved to pydantic_settings
+from pydantic_settings import BaseSettings
 
 # Load environment variables from .env file
 load_dotenv()
@@ -34,8 +36,12 @@ class Settings(BaseSettings):
     BLOCKCHAIN_CHANNEL: str = os.getenv("BLOCKCHAIN_CHANNEL", "rotrust-channel")
     BLOCKCHAIN_CHAINCODE: str = os.getenv("BLOCKCHAIN_CHAINCODE", "rotrust-chaincode")
     
-    class Config:
-        case_sensitive = True
+    model_config = {
+        "case_sensitive": True,
+        "env_file": ".env",
+        "env_file_encoding": "utf-8",
+        "extra": "ignore"
+    }
 
 
 # Create global settings object
