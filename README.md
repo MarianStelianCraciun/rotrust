@@ -345,7 +345,7 @@ For detailed contribution guidelines, please see our [CONTRIBUTING.md](.github/C
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under a PROPRIETARY AND CONFIDENTIAL LICENSE. Only the repository owner has the right to use this software - see the LICENSE file for details.
 
 ## Contact
 
