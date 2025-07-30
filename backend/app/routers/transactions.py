@@ -33,6 +33,7 @@ class TransactionResponse(BaseModel):
 
     class Config:
         orm_mode = True
+        from_attributes = True
 
 # Initialize service
 transaction_service = TransactionService()

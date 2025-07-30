@@ -30,6 +30,7 @@ class PropertyResponse(PropertyBase):
 
     class Config:
         orm_mode = True
+        from_attributes = True
 
 # Initialize service
 property_service = PropertyService()

@@ -87,24 +87,66 @@ Romania's real estate market presents significant opportunities:
 ## Getting Started
 
 ### Prerequisites
-- Python 3.8+
+- Python 3.8+ (Python 3.13 recommended)
+- Poetry (Python dependency management)
 - Docker and Docker Compose
 - Node.js 14+
 - Hyperledger Fabric binaries
 
+### Installing Poetry
+```bash
+# Install Poetry (Windows PowerShell)
+(Invoke-WebRequest -Uri https://install.python-poetry.org -UseBasicParsing).Content | python -
+
+# Add Poetry to your PATH
+# The installer will instruct you to add Poetry to your PATH
+```
+
+### Python Version
+This project supports Python 3.8 through 3.13. Python 3.13 is recommended for the best performance and latest features. Poetry will automatically manage the virtual environment with the appropriate Python version.
+
 ### Installation
+
+#### Using Makefile (Recommended)
+
+RoTrust provides a Makefile to simplify setup and operation:
 
 ```bash
 # Clone the repository
 git clone https://github.com/your-organization/rotrust.git
 cd rotrust
 
-# Set up virtual environment
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+# Set up the entire project (installs dependencies, sets up blockchain and frontend)
+make setup
 
-# Install dependencies
-pip install -r requirements.txt
+# Set up environment variables
+cp .env.example .env
+# Edit .env with your configuration
+
+# Run the backend server
+make run-backend
+
+# In a separate terminal, run the frontend server
+make run-frontend
+```
+
+For more options, run `make help` to see all available commands.
+
+#### Manual Installation
+
+If you prefer not to use the Makefile, you can follow these steps:
+
+```bash
+# Clone the repository
+git clone https://github.com/your-organization/rotrust.git
+cd rotrust
+
+# Install dependencies using Poetry
+# For production dependencies only
+poetry install --no-dev
+
+# Or for all dependencies including development tools
+poetry install
 
 # Set up environment variables
 cp .env.example .env
@@ -116,7 +158,33 @@ cd blockchain/network
 
 # Start the FastAPI application
 cd ../../backend
-uvicorn main:app --reload
+poetry run uvicorn main:app --reload
+```
+
+#### Using Batch Files (Windows)
+
+For Windows users, we provide batch files for easy startup:
+
+```bash
+# Clone the repository
+git clone https://github.com/your-organization/rotrust.git
+cd rotrust
+
+# Install dependencies using Poetry
+poetry install
+
+# Set up environment variables
+cp .env.example .env
+# Edit .env with your configuration
+
+# Run the backend server
+run_backend.bat
+
+# In a separate terminal, run the frontend server
+run_frontend.bat
+
+# Or run both backend and frontend with a single command
+run_all.bat
 ```
 
 ## API Documentation

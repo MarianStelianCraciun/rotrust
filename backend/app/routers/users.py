@@ -26,6 +26,7 @@ class UserResponse(UserBase):
 
     class Config:
         orm_mode = True
+        from_attributes = True
 
 # Initialize service
 auth_service = AuthService()
