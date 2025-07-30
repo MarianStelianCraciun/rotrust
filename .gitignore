@@ -117,3 +117,4 @@ blockchain/network/connection-profiles/
 *.sqlite
 .DS_Store
 node_modules/
+RoTrust
