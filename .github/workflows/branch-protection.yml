@@ -33,8 +33,17 @@ jobs:
           PR_NUMBER: ${{ github.event.pull_request.number }}
           REPO: ${{ github.repository }}
           REQUIRED_APPROVER: "MarianStelianCraciun"  # Replace with the actual username
+          PR_AUTHOR: ${{ github.event.pull_request.user.login }}
         run: |
           echo "Pull request to main branch detected."
+          
+          # Skip approval check if the PR author is the required approver
+          if [ "$PR_AUTHOR" == "$REQUIRED_APPROVER" ]; then
+            echo "✅ Pull request author is $REQUIRED_APPROVER. Approval check skipped."
+            echo "This PR can be merged to the main branch."
+            exit 0
+          fi
+          
           echo "Checking for required approval from $REQUIRED_APPROVER..."
           
           # Get the list of reviews for this PR
