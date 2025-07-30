@@ -10,6 +10,18 @@ jobs:
   enforce-branch-protection:
     runs-on: ubuntu-latest
     steps:
+      - name: Check if push is direct to main
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          # Allow the repository owner to push directly to main
+          if [ "${{ github.actor }}" == "MarianStelianCraciun" ]; then
+            echo "Repository owner detected. Allowing direct push to main branch."
+          else
+            echo "Direct pushes to main branch are not allowed!"
+            echo "Please create a pull request instead."
+            exit 1
+          fi
+          
       - name: Checkout code
         uses: actions/checkout@v3
         if: github.event_name == 'pull_request'
