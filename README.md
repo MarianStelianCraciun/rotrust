@@ -339,7 +339,7 @@ To contribute:
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-For detailed contribution guidelines, please see our [CONTRIBUTING.md](.github/CONTRIBUTING.md) file.
+For detailed contribution guidelines, please see our [CONTRIBUTING.md](.github/CONTRIBUTING.md) file. For comprehensive workflow guidelines that ensure accurate and concise development processes, refer to our [WORKFLOW_GUIDELINES.md](.github/WORKFLOW_GUIDELINES.md) document.
 
 ## License
 
