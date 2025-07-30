@@ -13,12 +13,19 @@ jobs:
       - name: Check if push is direct to main
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
+          echo "Push event detected to main branch."
+          echo "Actor: ${{ github.actor }}"
+          echo "Commit: ${{ github.sha }}"
+          echo "Repository: ${{ github.repository }}"
+          echo "Timestamp: $(date)"
+          
           # Allow the repository owner to push directly to main
           if [ "${{ github.actor }}" == "MarianStelianCraciun" ]; then
-            echo "Repository owner detected. Allowing direct push to main branch."
+            echo "[SUCCESS] Repository owner detected. Allowing direct push to main branch."
           else
-            echo "Direct pushes to main branch are not allowed!"
-            echo "Please create a pull request instead."
+            echo "[ERROR] Direct pushes to main branch are not allowed!"
+            echo "[ERROR] User '${{ github.actor }}' is not authorized for direct pushes."
+            echo "[ERROR] Please create a pull request instead."
             exit 1
           fi
           
@@ -39,10 +46,11 @@ jobs:
           
           # Skip approval check if the PR author is the required approver
           if [ "$PR_AUTHOR" == "$REQUIRED_APPROVER" ]; then
-            echo "✅ Pull request author is $REQUIRED_APPROVER. Approval check skipped."
-            echo "This PR can be merged to the main branch."
+            echo "[SUCCESS] Pull request author is $REQUIRED_APPROVER. Approval check skipped."
+            echo "[SUCCESS] This PR can be merged to the main branch."
             exit 0
           fi
+ 
           
           echo "Checking for required approval from $REQUIRED_APPROVER..."
           
@@ -54,10 +62,10 @@ jobs:
           APPROVED=$(echo $REVIEWS | jq -r --arg APPROVER "$REQUIRED_APPROVER" '.[] | select(.user.login==$APPROVER and .state=="APPROVED") | .state')
           
           if [ "$APPROVED" == "APPROVED" ]; then
-            echo "✅ Pull request has been approved by $REQUIRED_APPROVER."
-            echo "This PR can be merged to the main branch."
+            echo "[SUCCESS] Pull request has been approved by $REQUIRED_APPROVER."
+            echo "[SUCCESS] This PR can be merged to the main branch."
           else
-            echo "❌ Pull request has NOT been approved by $REQUIRED_APPROVER."
-            echo "This PR cannot be merged until it receives approval from $REQUIRED_APPROVER."
+            echo "[ERROR] Pull request has NOT been approved by $REQUIRED_APPROVER."
+            echo "[ERROR] This PR cannot be merged until it receives approval from $REQUIRED_APPROVER."
             exit 1
           fi
