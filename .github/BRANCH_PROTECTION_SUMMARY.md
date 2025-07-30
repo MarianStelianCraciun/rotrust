@@ -8,11 +8,13 @@ The requirement was to create a pipeline to prevent direct pushes to the main br
 ### 1. GitHub Actions Workflow
 Created a GitHub Actions workflow file (`.github/workflows/branch-protection.yml`) that:
 - Triggers on push and pull request events targeting the main branch
-- For push events to main, checks if it's a direct push and fails the workflow with an error message
+- For push events to main:
+  - Allows direct pushes from the repository owner (MarianStelianCraciun)
+  - For all other users, fails the workflow with an error message
 - For pull requests to main, verifies that the pull request has been approved by the repository owner
 - Fails the workflow if the required approval is missing
 
-This workflow effectively prevents direct pushes to the main branch and ensures that only pull requests approved by the repository owner can be merged to main. It enforces this by failing the CI pipeline when someone attempts to push directly to main or merge a pull request without the required approval.
+This workflow effectively prevents direct pushes to the main branch from unauthorized users while allowing the repository owner to bypass this restriction. It also ensures that only pull requests approved by the repository owner can be merged to main. It enforces these rules by checking the user who initiated the workflow and failing the CI pipeline when appropriate.
 
 ### 2. Documentation
 Created comprehensive documentation to explain the branch protection rules:

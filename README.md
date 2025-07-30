@@ -327,8 +327,9 @@ PUT /api/transactions/transfers/{transaction_id}/cancel
 
 We welcome contributions to the RoTrust project. Please note that we have implemented branch protection rules to maintain code quality:
 
-- **Direct pushes to the main branch are not allowed**
-- All changes must be made through pull requests
+- **Direct pushes to the main branch are not allowed** (except for the repository owner)
+- **The repository owner can push directly to the main branch**
+- All other contributors must make changes to the main branch through pull requests
 - Pull requests require specific approval before merging
 - **Only pull requests approved by the repository owner can be merged to main**
 
