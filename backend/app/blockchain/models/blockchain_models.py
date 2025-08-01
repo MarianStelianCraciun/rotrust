@@ -13,7 +13,7 @@ Implementation Guidelines:
 """
 
 from typing import Dict, List, Optional, Any, Union
-from pydantic import BaseModel, Field, validator
+from pydantic import BaseModel, Field, field_validator
 from datetime import datetime
 import uuid
 
@@ -51,12 +51,11 @@ class BlockchainTransaction(BaseModel):
         description="List of endorsements for the transaction"
     )
     
-    class Config:
-        """Pydantic model configuration."""
-        
-        json_encoders = {
+    model_config = {
+        "json_encoders": {
             datetime: lambda dt: dt.isoformat()
         }
+    }
 
 
 class PropertyRecord(BaseModel):
@@ -93,7 +92,7 @@ class PropertyRecord(BaseModel):
         description="Additional property attributes"
     )
     
-    @validator('property_type')
+    @field_validator('property_type')
     def validate_property_type(cls, v):
         """Validate property type."""
         valid_types = ['apartment', 'house', 'land', 'commercial', 'industrial']
@@ -101,7 +100,7 @@ class PropertyRecord(BaseModel):
             raise ValueError(f"Property type must be one of {valid_types}")
         return v
     
-    @validator('status')
+    @field_validator('status')
     def validate_status(cls, v):
         """Validate property status."""
         valid_statuses = ['active', 'pending', 'inactive']
@@ -109,12 +108,11 @@ class PropertyRecord(BaseModel):
             raise ValueError(f"Status must be one of {valid_statuses}")
         return v
     
-    class Config:
-        """Pydantic model configuration."""
-        
-        json_encoders = {
+    model_config = {
+        "json_encoders": {
             datetime: lambda dt: dt.isoformat()
         }
+    }
 
 
 class OwnershipTransfer(BaseModel):
@@ -154,12 +152,11 @@ class OwnershipTransfer(BaseModel):
         description="Additional notes about the transfer"
     )
     
-    class Config:
-        """Pydantic model configuration."""
-        
-        json_encoders = {
+    model_config = {
+        "json_encoders": {
             datetime: lambda dt: dt.isoformat()
         }
+    }
 
 
 class PropertyHistory(BaseModel):
@@ -182,12 +179,11 @@ class PropertyHistory(BaseModel):
         description="List of ownership transfers for the property"
     )
     
-    class Config:
-        """Pydantic model configuration."""
-        
-        json_encoders = {
+    model_config = {
+        "json_encoders": {
             datetime: lambda dt: dt.isoformat()
         }
+    }
 
 
 class BlockchainQueryResult(BaseModel):
@@ -221,7 +217,7 @@ class BlockchainQueryResult(BaseModel):
         description="Error message (if query_status is 'error')"
     )
     
-    @validator('query_status')
+    @field_validator('query_status')
     def validate_query_status(cls, v):
         """Validate query status."""
         valid_statuses = ['success', 'error', 'pending']
@@ -229,9 +225,8 @@ class BlockchainQueryResult(BaseModel):
             raise ValueError(f"Query status must be one of {valid_statuses}")
         return v
     
-    class Config:
-        """Pydantic model configuration."""
-        
-        json_encoders = {
+    model_config = {
+        "json_encoders": {
             datetime: lambda dt: dt.isoformat()
         }
+    }
